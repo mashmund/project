@@ -1,2 +1,1 @@
-print('Hiiiiiii!')
-print('ксюша')
+print('Hi!')
