@@ -1,1 +1,2 @@
 print('Hiiiiiii!')
+print('ксюша')
