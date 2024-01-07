@@ -101,7 +101,10 @@ def next_screen():
                     hero_chosen = 3
                 else:
                     print(pygame.mouse.get_pos())
-                    pass
+                    if hero_chosen != 0:
+                        return hero_chosen
+                    else:
+                        pass
                     # начинаем игру
         # тут рисуем женщин на выбор
         ksusha_rect = pygame.draw.rect(screen, color1, (115, 150, 30, 30), 40)
