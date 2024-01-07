@@ -62,10 +62,7 @@ def start_screen():
 
 
 def next_screen():
-    intro_text = ["ЗАСТАВКА", "",
-                  "Правила игры",
-                  "Если в правилах несколько строк,",
-                  "приходится выводить их построчно"]
+    intro_text = ["                           ВЫБЕРИТЕ ПЕРСОНАЖА", "",]
 
     fon = pygame.transform.scale(load_image('f2.jpg'), (size))
     screen.blit(fon, (0, 0))
