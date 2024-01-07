@@ -111,6 +111,7 @@ def next_screen():
         clock.tick(FPS)
 
 
+
 class Hero:
     def __init__(self):
         # x, y, rect
