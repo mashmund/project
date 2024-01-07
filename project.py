@@ -64,7 +64,7 @@ def start_screen():
 def next_screen():
     intro_text = ["                           ВЫБЕРИТЕ ПЕРСОНАЖА", "",]
 
-    fon = pygame.transform.scale(load_image('f2.jpg'), (size))
+    fon = pygame.transform.scale(load_image('f3.jpg'), (size))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
     text_coord = 50
