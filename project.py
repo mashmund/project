@@ -12,14 +12,13 @@ clock = pygame.time.Clock()
 
 
 def load_image(name):
-    fullname = os.path.join('data', name)
+    fullname = os.path.join('', name)
     # если файл не существует, то выходим
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()
     image = pygame.image.load(fullname)
     return image
-
 
 
 def terminate():
@@ -58,9 +57,6 @@ def start_screen():
         clock.tick(FPS)
 
 
-
-
-
 def next_screen():
     intro_text = ["ЗАСТАВКА", "",
                   "Правила игры",
@@ -81,6 +77,7 @@ def next_screen():
         screen.blit(string_rendered, intro_rect)
     color1 = (0, 0, 0)
     color2 = (0, 0, 0)
+    color3 = (0, 0, 0)
     hero_chosen = 0
     while True:
         for event in pygame.event.get():
@@ -88,21 +85,30 @@ def next_screen():
                 terminate()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 if ksusha_rect.collidepoint(pygame.mouse.get_pos()):
-                    color1 = (255, 255, 255)
+                    color1 = (0, 255, 0)
                     color2 = (0, 0, 0)
+                    color3 = (0, 0, 0)
                     print(pygame.mouse.get_pos())
                     hero_chosen = 1
-                elif ksusha2_rect.collidepoint(pygame.mouse.get_pos()):
-                    color2 = (255, 255, 255)
+                elif maria_rect.collidepoint(pygame.mouse.get_pos()):
                     color1 = (0, 0, 0)
+                    color2 = (255, 0, 0)
+                    color3 = (0, 0, 0)
                     print(pygame.mouse.get_pos())
                     hero_chosen = 2
+                elif stesha_rect.collidepoint(pygame.mouse.get_pos()):
+                    color1 = (0, 0, 0)
+                    color2 = (0, 0, 0)
+                    color3 = (0, 0, 255)
+                    print(pygame.mouse.get_pos())
+                    hero_chosen = 3
                 else:
                     return hero_chosen
                     # начинаем игру
-        #тут рисуем женщин на выбор
+        # тут рисуем женщин на выбор
         ksusha_rect = pygame.draw.rect(screen, color1, (30, 30, 30, 30), 40)
-        ksusha2_rect = pygame.draw.rect(screen, color2, (70, 30, 30, 30), 40)
+        maria_rect = pygame.draw.rect(screen, color2, (70, 30, 30, 30), 40)
+        stesha_rect = pygame.draw.rect(screen, color3, (110, 30, 30, 30), 40)
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -112,8 +118,10 @@ class Hero:
         # x, y, rect
         pass
 
+
 class Trap:
     pass
+
 
 # настройка переменных
 x_fon = 0
@@ -125,8 +133,8 @@ is_jump = False
 trap_list = [Trap(), Trap()]
 
 # Работаем с изображениями
-fon_image = load_image('fon2.png')
-fon_rect = pygame.transform.scale(fon_image,(1200,400))
+fon_image = load_image("fon2.png")
+fon_rect = pygame.transform.scale(fon_image, (1200, 400))
 
 # начинается игра
 start_screen()
@@ -134,9 +142,14 @@ hero_chosen = next_screen()
 
 # загружаем нужного персонажа
 if hero_chosen == 1:
-    path_list = ['бежит/0.png','бежит/1.png','бежит/2.png','бежит/3.png']
-    hero_list = [pygame.transform.scale(load_image(path),(60,60)) for path in path_list]
-
+    path_list = ['бежит/0.png', 'бежит/1.png', 'бежит/2.png', 'бежит/3.png']
+    hero_list = [pygame.transform.scale(load_image(path), (60, 60)) for path in path_list]
+if hero_chosen == 2:
+    path_list = ['бежит/0.png', 'бежит/1.png', 'бежит/2.png', 'бежит/3.png']
+    hero_list = [pygame.transform.scale(load_image(path), (60, 60)) for path in path_list]
+if hero_chosen == 3:
+    path_list = ['бежит/0.png', 'бежит/1.png', 'бежит/2.png', 'бежит/3.png']
+    hero_list = [pygame.transform.scale(load_image(path), (60, 60)) for path in path_list]
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -147,8 +160,6 @@ while True:
                 is_jump = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pass
-
-
 
     x_fon -= fon_speed
     n_card += 1
@@ -166,13 +177,13 @@ while True:
         is_jump = False
 
     # отрисовка всех штук на экране
-    screen.blit(fon_rect,(x_fon,0))
+    screen.blit(fon_rect, (x_fon, 0))
     ground = pygame.draw.rect(screen, (100, 100, 100), (0, 340, 600, 400), 40)
 
     for trap in trap_list:
         pass
 
-    screen.blit(hero_list[n_card],(50,y - 40))
+    screen.blit(hero_list[n_card], (50, y - 40))
 
     pygame.display.flip()
     clock.tick(FPS)
