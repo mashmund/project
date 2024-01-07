@@ -72,9 +72,9 @@ def next_screen():
         intro_rect.x = 10
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
-    color1 = (0, 0, 0)
-    color2 = (0, 0, 0)
-    color3 = (0, 0, 0)
+    color1 = (255, 255, 255)
+    color2 = (255, 255, 255)
+    color3 = (255, 255, 255)
     hero_chosen = 0
     while True:
         for event in pygame.event.get():
@@ -83,19 +83,19 @@ def next_screen():
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 if ksusha_rect.collidepoint(pygame.mouse.get_pos()):
                     color1 = (0, 255, 0)
-                    color2 = (0, 0, 0)
-                    color3 = (0, 0, 0)
+                    color2 = (255, 255, 255)
+                    color3 = (255, 255, 255)
                     print(pygame.mouse.get_pos())
                     hero_chosen = 1
                 elif maria_rect.collidepoint(pygame.mouse.get_pos()):
-                    color1 = (0, 0, 0)
+                    color1 = (255, 255, 255)
                     color2 = (255, 0, 0)
-                    color3 = (0, 0, 0)
+                    color3 = (255, 255, 255)
                     print(pygame.mouse.get_pos())
                     hero_chosen = 2
                 elif stesha_rect.collidepoint(pygame.mouse.get_pos()):
-                    color1 = (0, 0, 0)
-                    color2 = (0, 0, 0)
+                    color1 = (255, 255, 255)
+                    color2 = (255, 255, 255)
                     color3 = (0, 0, 255)
                     print(pygame.mouse.get_pos())
                     hero_chosen = 3
@@ -104,9 +104,9 @@ def next_screen():
                     return hero_chosen
                     # начинаем игру
         # тут рисуем женщин на выбор
-        ksusha_rect = pygame.draw.rect(screen, color1, (30, 30, 30, 30), 40)
-        maria_rect = pygame.draw.rect(screen, color2, (70, 30, 30, 30), 40)
-        stesha_rect = pygame.draw.rect(screen, color3, (110, 30, 30, 30), 40)
+        ksusha_rect = pygame.draw.rect(screen, color1, (115, 150, 30, 30), 40)
+        maria_rect = pygame.draw.rect(screen, color2, (280, 150, 30, 30), 40)
+        stesha_rect = pygame.draw.rect(screen, color3, (445, 150, 30, 30), 40)
         pygame.display.flip()
         clock.tick(FPS)
 
