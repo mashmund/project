@@ -58,10 +58,7 @@ def start_screen():
 
 
 def next_screen():
-    intro_text = ["ЗАСТАВКА", "",
-                  "Правила игры",
-                  "Если в правилах несколько строк,",
-                  "приходится выводить их построчно"]
+    intro_text = ["                           ВЫБЕРИТЕ ПЕРСОНАЖА", "",]
 
     fon = pygame.transform.scale(load_image('f2.jpg'), (size))
     screen.blit(fon, (0, 0))
@@ -103,6 +100,7 @@ def next_screen():
                     print(pygame.mouse.get_pos())
                     hero_chosen = 3
                 else:
+                    print(pygame.mouse.get_pos())
                     return hero_chosen
                     # начинаем игру
         # тут рисуем женщин на выбор
