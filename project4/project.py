@@ -157,8 +157,9 @@ if hero_chosen == 2:
     path_list = ['бежит/0.png', 'бежит/1.png', 'бежит/2.png', 'бежит/3.png']
     hero_list = [pygame.transform.scale(load_image(path), (60, 60)) for path in path_list]
 if hero_chosen == 3:
-    path_list = ['бежит/0.png', 'бежит/1.png', 'бежит/2.png', 'бежит/3.png']
-    hero_list = [pygame.transform.scale(load_image(path), (60, 60)) for path in path_list]
+    path_list = ['runningS/stesha_0.png', 'runningS/stesha_0.png', 'runningS/stesha_2.png', 'runningS/stesha_2.png',
+                 'runningS/stesha_2.png', 'runningS/stesha_0.png', 'runningS/stesha_0.png']
+    hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
