@@ -137,8 +137,8 @@ n_card = 0
 dy = 0
 y = 350
 is_jump = False
-trap_list = [Trap(300, 325, (40, 40), './data/book.png'),
-             Trap(900, 325, (40, 40), './data/book.png')]
+trap_list = [Trap(300, 200, (100, 100), './running K/ksusha_4.png'),
+             Trap(600, 200, (100, 100), './running K/ksusha_4.png')]
 
 # Работаем с изображениями
 fon_image = load_image("fon2.png")
@@ -150,8 +150,9 @@ hero_chosen = next_screen()
 
 # загружаем нужного персонажа
 if hero_chosen == 1:
-    path_list = ['бежит/0.png', 'бежит/1.png', 'бежит/2.png', 'бежит/3.png']
-    hero_list = [pygame.transform.scale(load_image(path), (60, 60)) for path in path_list]
+    path_list = ['running K/00.png', 'running K/00.png', 'running K/ksusha_2.png', 'running K/ksusha_2.png',
+                 'running K/ksusha_2.png', 'running K/00.png', 'running K/00.png']
+    hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
 if hero_chosen == 2:
     path_list = ['бежит/0.png', 'бежит/1.png', 'бежит/2.png', 'бежит/3.png']
     hero_list = [pygame.transform.scale(load_image(path), (60, 60)) for path in path_list]
@@ -173,7 +174,7 @@ while True:
     n_card += 1
     if x_fon <= -600:
         x_fon = 0
-    if n_card % 4 == 0:
+    if n_card % 7 == 0:
         n_card = 0
     # гравитация
     y += dy
@@ -191,12 +192,11 @@ while True:
     for trap in trap_list:
         screen.blit(trap.img_rect, (trap.x, trap.y))
         trap.x -= fon_speed
-        if trap.img_rect.get_rect(topleft=(trap.x,trap.y)).colliderect(hero_list[n_card].get_rect(topleft=(50, y - 40))):
-            fon_speed=0
+        if trap.img_rect.get_rect(topleft=(trap.x, trap.y)).colliderect(
+                hero_list[n_card].get_rect(topleft=(50, y - 40))):
+            fon_speed = 0
 
     screen.blit(hero_list[n_card], (50, y - 40))
-
-
 
     pygame.display.flip()
     clock.tick(FPS)
