@@ -137,8 +137,8 @@ n_card = 0
 dy = 0
 y = 350
 is_jump = False
-trap_list = [Trap(300, 200, (100, 100), './running K/ksusha_4.png'),
-             Trap(600, 200, (100, 100), './running K/ksusha_4.png')]
+trap_list = [Trap(300, 325, (40, 40), './data/book.png'),
+             Trap(900, 325, (40, 40), './data/book.png')]
 
 # Работаем с изображениями
 fon_image = load_image("fon2.png")
@@ -192,11 +192,8 @@ while True:
     for trap in trap_list:
         screen.blit(trap.img_rect, (trap.x, trap.y))
         trap.x -= fon_speed
-        if trap.img_rect.get_rect(topleft=(trap.x, trap.y)).colliderect(
-                hero_list[n_card].get_rect(topleft=(50, y - 40))):
+        if trap.img_rect.get_rect(topleft=(trap.x, trap.y)).colliderect(hero_list[n_card].get_rect(topleft=(50, y - 40))):
             fon_speed = 0
-
     screen.blit(hero_list[n_card], (50, y - 40))
-
     pygame.display.flip()
     clock.tick(FPS)
