@@ -65,6 +65,7 @@ def next_screen():
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
     text_coord = 50
+    pygame.display.flip()
     for line in intro_text:
         string_rendered = font.render(line, 1, pygame.Color('white'))
         intro_rect = string_rendered.get_rect()
@@ -154,8 +155,9 @@ if hero_chosen == 1:
                  'running K/ksusha_2.png', 'running K/00.png', 'running K/00.png']
     hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
 if hero_chosen == 2:
-    path_list = ['бежит/0.png', 'бежит/1.png', 'бежит/2.png', 'бежит/3.png']
-    hero_list = [pygame.transform.scale(load_image(path), (60, 60)) for path in path_list]
+    path_list = ['runningM/maria_0.png', 'runningM/maria_0.png', 'runningM/maria_2.png', 'runningM/maria_2.png',
+                 'runningM/maria_2.png', 'runningM/maria_0.png', 'runningM/maria_0.png']
+    hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
 if hero_chosen == 3:
     path_list = ['runningS/stesha_0.png', 'runningS/stesha_0.png', 'runningS/stesha_2.png', 'runningS/stesha_2.png',
                  'runningS/stesha_2.png', 'runningS/stesha_0.png', 'runningS/stesha_0.png']
