@@ -156,7 +156,13 @@ def game_over():
             elif event.type == pygame.KEYDOWN:
                 return True
 
-# trap_list = []
+x_b = 0
+trap_list = []
+for i in range(5):
+    x_b += random.randint(300, 800) + 150
+    trap_list.append(Trap(x_b, 360, (30, 30), './data/book.png'))
+
+
 is_try_again = True
 while is_try_again:
     print('Я продолжаюсь')
@@ -170,13 +176,7 @@ while is_try_again:
     dy = 0
     y = 350
     is_jump = False
-    trap_list = [Trap(300, 320, (35, 35), './data/book.png'),
-                 Trap(900, 320, (35, 35), './data/book.png')]
     while is_game:
-        #screen.blit(fon_rect, (x_fon, 0))
-        #ground = pygame.draw.rect(screen, (100, 100, 100), (0, 340, 600, 400), 40)
-        #MYEVENTTYPE = pygame.USEREVENT + 5
-        #pygame.time.set_timer(MYEVENTTYPE, 20)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
@@ -186,13 +186,6 @@ while is_try_again:
                     is_jump = True
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 pass
-            #elif event.type == MYEVENTTYPE:
-                #trap_list.append(Trap(400,325, (40, 40), './data/book.png'))
-                #for trap in trap_list:
-                    #screen.blit(trap.img_rect, (trap.x, trap.y))
-                    #trap.x -= fon_speed
-                    #if trap.img_rect.get_rect(topleft=(trap.x,trap.y)).colliderect(hero_list[n_card].get_rect(topleft=(50, y - 40))):
-                        #fon_speed=0
         x_fon -= fon_speed
         n_card += 1
         if x_fon <= -600:
@@ -222,6 +215,7 @@ while is_try_again:
                 path_list = ['data/luzha.png' for _ in range(7)]
                 hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
                 is_game_over = False
+
 
         screen.blit(hero_list[n_card], (50, y - 40))
 
