@@ -182,7 +182,7 @@ while is_try_again:
                 terminate()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and not is_jump:
-                    dy = -5
+                    dy = -8
                     is_jump = True
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 pass
