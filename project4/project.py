@@ -2,6 +2,7 @@ import os
 import random
 import sys
 import pygame
+import time
 
 FPS = 50
 size = width, height = 600, 400
@@ -138,8 +139,8 @@ n_card = 0
 dy = 0
 y = 350
 is_jump = False
-trap_list = [Trap(300, 325, (40, 40), './data/book.png'),
-             Trap(900, 325, (40, 40), './data/book.png')]
+trap_list = [Trap(300, 320, (35, 35), './data/book.png'),
+             Trap(900, 320, (35, 35), './data/book.png')]
 
 # Работаем с изображениями
 fon_image = load_image("fon2.png")
@@ -162,7 +163,22 @@ if hero_chosen == 3:
     path_list = ['runningS/stesha_0.png', 'runningS/stesha_0.png', 'runningS/stesha_2.png', 'runningS/stesha_2.png',
                  'runningS/stesha_2.png', 'runningS/stesha_0.png', 'runningS/stesha_0.png']
     hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
+
+
+def game_over():
+    fon = pygame.transform.scale(load_image('game_over.jpg'), (size))
+    screen.blit(fon, (0, 0))
+    while True:
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+# trap_list = []
 while True:
+    #screen.blit(fon_rect, (x_fon, 0))
+    #ground = pygame.draw.rect(screen, (100, 100, 100), (0, 340, 600, 400), 40)
+    #MYEVENTTYPE = pygame.USEREVENT + 5
+    #pygame.time.set_timer(MYEVENTTYPE, 20)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             terminate()
@@ -172,12 +188,18 @@ while True:
                 is_jump = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pass
-
+        #elif event.type == MYEVENTTYPE:
+            #trap_list.append(Trap(400,325, (40, 40), './data/book.png'))
+            #for trap in trap_list:
+                #screen.blit(trap.img_rect, (trap.x, trap.y))
+                #trap.x -= fon_speed
+                #if trap.img_rect.get_rect(topleft=(trap.x,trap.y)).colliderect(hero_list[n_card].get_rect(topleft=(50, y - 40))):
+                    #fon_speed=0
     x_fon -= fon_speed
     n_card += 1
     if x_fon <= -600:
         x_fon = 0
-    if n_card % 7 == 0:
+    if n_card % 4 == 0:
         n_card = 0
     # гравитация
     y += dy
@@ -189,14 +211,22 @@ while True:
         is_jump = False
 
     # отрисовка всех штук на экране
+
     screen.blit(fon_rect, (x_fon, 0))
     ground = pygame.draw.rect(screen, (100, 100, 100), (0, 340, 600, 400), 40)
 
     for trap in trap_list:
         screen.blit(trap.img_rect, (trap.x, trap.y))
         trap.x -= fon_speed
-        if trap.img_rect.get_rect(topleft=(trap.x, trap.y)).colliderect(hero_list[n_card].get_rect(topleft=(50, y - 40))):
+        if trap.img_rect.get_rect(topleft=(trap.x, trap.y)).colliderect(
+                hero_list[n_card].get_rect(topleft=(50, y - 40))):
             fon_speed = 0
+            path_list = ['data/luzha.png', 'data/luzha.png', 'data/luzha.png', 'data/luzha.png']
+            hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
+            game_over()
+
+
+
     screen.blit(hero_list[n_card], (50, y - 40))
     pygame.display.flip()
     clock.tick(FPS)
