@@ -1,7 +1,9 @@
-import os
+
 import random
-import sys
-import pygame
+
+
+import time
+from sup_func import *
 
 FPS = 50
 size = width, height = 600, 400
@@ -9,16 +11,6 @@ size = width, height = 600, 400
 pygame.init()
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
-
-
-def load_image(name):
-    fullname = os.path.join('', name)
-    # если файл не существует, то выходим
-    if not os.path.isfile(fullname):
-        print(f"Файл с изображением '{fullname}' не найден")
-        sys.exit()
-    image = pygame.image.load(fullname)
-    return image
 
 
 def terminate():
@@ -65,6 +57,7 @@ def next_screen():
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
     text_coord = 50
+    pygame.display.flip()
     for line in intro_text:
         string_rendered = font.render(line, 1, pygame.Color('white'))
         intro_rect = string_rendered.get_rect()
@@ -115,7 +108,6 @@ def next_screen():
         clock.tick(FPS)
 
 
-
 class Hero:
     def __init__(self):
         # x, y, rect
@@ -123,7 +115,12 @@ class Hero:
 
 
 class Trap:
-    pass
+    def __init__(self, x, y, size: tuple, img):
+        self.x = x
+        self.y = y
+        self.size = size
+        self.img_rect = load_image(img)
+        self.img_rect = pygame.transform.scale(self.img_rect, self.size)
 
 
 # настройка переменных
@@ -133,60 +130,106 @@ n_card = 0
 dy = 0
 y = 350
 is_jump = False
-trap_list = [Trap(), Trap()]
+trap_list = [Trap(300, 320, (35, 35), './data/book.png'),
+             Trap(900, 320, (35, 35), './data/book.png')]
 
 # Работаем с изображениями
 fon_image = load_image("fon2.png")
 fon_rect = pygame.transform.scale(fon_image, (1200, 400))
 
+
+
 # начинается игра
 start_screen()
 hero_chosen = next_screen()
-
 # загружаем нужного персонажа
-if hero_chosen == 1:
-    path_list = ['бежит/0.png', 'бежит/1.png', 'бежит/2.png', 'бежит/3.png']
-    hero_list = [pygame.transform.scale(load_image(path), (60, 60)) for path in path_list]
-if hero_chosen == 2:
-    path_list = ['бежит/0.png', 'бежит/1.png', 'бежит/2.png', 'бежит/3.png']
-    hero_list = [pygame.transform.scale(load_image(path), (60, 60)) for path in path_list]
-if hero_chosen == 3:
-    path_list = ['бежит/0.png', 'бежит/1.png', 'бежит/2.png', 'бежит/3.png']
-    hero_list = [pygame.transform.scale(load_image(path), (60, 60)) for path in path_list]
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            terminate()
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and not is_jump:
-                dy = -5
-                is_jump = True
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            pass
+hero_list = load_hero_images(hero_chosen)
+def game_over():
+    fon = pygame.transform.scale(load_image('game_over.jpg'), (size))
+    screen.blit(fon, (0, 0))
+    while True:
+        pygame.display.flip()
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.KEYDOWN:
+                return True
 
-    x_fon -= fon_speed
-    n_card += 1
-    if x_fon <= -600:
-        x_fon = 0
-    if n_card % 4 == 0:
-        n_card = 0
-    # гравитация
-    y += dy
-    dy += 0.2
+# trap_list = []
+is_try_again = True
+while is_try_again:
+    print('Я продолжаюсь')
+    is_game = True
+    is_game_over = True
+    count_luzha = 0
+    hero_list = load_hero_images(hero_chosen)
+    x_fon = 0
+    fon_speed = 2
+    n_card = 0
+    dy = 0
+    y = 350
+    is_jump = False
+    trap_list = [Trap(300, 320, (35, 35), './data/book.png'),
+                 Trap(900, 320, (35, 35), './data/book.png')]
+    while is_game:
+        #screen.blit(fon_rect, (x_fon, 0))
+        #ground = pygame.draw.rect(screen, (100, 100, 100), (0, 340, 600, 400), 40)
+        #MYEVENTTYPE = pygame.USEREVENT + 5
+        #pygame.time.set_timer(MYEVENTTYPE, 20)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and not is_jump:
+                    dy = -5
+                    is_jump = True
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                pass
+            #elif event.type == MYEVENTTYPE:
+                #trap_list.append(Trap(400,325, (40, 40), './data/book.png'))
+                #for trap in trap_list:
+                    #screen.blit(trap.img_rect, (trap.x, trap.y))
+                    #trap.x -= fon_speed
+                    #if trap.img_rect.get_rect(topleft=(trap.x,trap.y)).colliderect(hero_list[n_card].get_rect(topleft=(50, y - 40))):
+                        #fon_speed=0
+        x_fon -= fon_speed
+        n_card += 1
+        if x_fon <= -600:
+            x_fon = 0
+        if n_card % 7 == 0:
+            n_card = 0
+        # гравитация
+        y += dy
+        dy += 0.2
 
-    if y >= 350:
-        y = 350
-        dy = 0
-        is_jump = False
+        if y >= 350:
+            y = 350
+            dy = 0
+            is_jump = False
 
-    # отрисовка всех штук на экране
-    screen.blit(fon_rect, (x_fon, 0))
-    ground = pygame.draw.rect(screen, (100, 100, 100), (0, 340, 600, 400), 40)
+        # отрисовка всех штук на экране
 
-    for trap in trap_list:
-        pass
+        screen.blit(fon_rect, (x_fon, 0))
+        ground = pygame.draw.rect(screen, (100, 100, 100), (0, 340, 600, 400), 40)
 
-    screen.blit(hero_list[n_card], (50, y - 40))
+        for trap in trap_list:
+            screen.blit(trap.img_rect, (trap.x, trap.y))
+            trap.x -= fon_speed
+            if trap.img_rect.get_rect(topleft=(trap.x, trap.y)).colliderect(
+                    hero_list[n_card].get_rect(topleft=(50, y - 40))):
+                fon_speed = 0
+                path_list = ['data/luzha.png' for _ in range(7)]
+                hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
+                is_game_over = False
 
-    pygame.display.flip()
-    clock.tick(FPS)
+        screen.blit(hero_list[n_card], (50, y - 40))
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+        if not is_game_over:
+            pygame.time.delay(2000)
+            is_game = False
+
+    is_try_again = game_over()
