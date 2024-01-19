@@ -55,6 +55,15 @@ def next_screen():
 
     fon = pygame.transform.scale(load_image('f2.jpg'), (size))
     screen.blit(fon, (0, 0))
+    image_k = load_image('running K/00.png').convert_alpha()
+    ksusha_image = pygame.transform.scale(image_k, (100, 135))
+    screen.blit(ksusha_image, (75, 200))
+    image_m = load_image('runningM/maria_0.png').convert_alpha()
+    masha_image = pygame.transform.scale(image_m, (100, 135))
+    screen.blit(masha_image, (245, 200))
+    image_s = load_image('runningS/stesha_0.png').convert_alpha()
+    stesha_image = pygame.transform.scale(image_s, (100, 135))
+    screen.blit(stesha_image, (415, 200))
     font = pygame.font.Font(None, 30)
     text_coord = 50
     pygame.display.flip()
