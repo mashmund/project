@@ -13,6 +13,16 @@ def load_image(name):
     image = pygame.image.load(fullname)
     return image
 
+
+def load_music(name):
+    fullname = name
+    # если файл не существует, то выходим
+    if not os.path.isfile(fullname):
+        print(f"Файл со звуком '{fullname}' не найден")
+        sys.exit()
+    return pygame.mixer.Sound(fullname)
+
+
 def load_hero_images(hero_chosen):
     if hero_chosen == 1:
         path_list = ['running K/00.png', 'running K/00.png', 'running K/ksusha_2.png', 'running K/ksusha_2.png',

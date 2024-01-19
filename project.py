@@ -1,8 +1,9 @@
-
 import random
 
-
 import time
+
+import pygame
+
 from sup_func import *
 
 FPS = 50
@@ -19,12 +20,16 @@ def terminate():
 
 
 def start_screen():
+    load_music("sounds/mistika.mp3").play()
     intro_text = ["                        ШКОЛА: НЕТ ПУТИ ДОМОЙ", "",
                   "    Добро пожаловать в игру 'Школа: нет пути домой'!",
                   "    В игре Вам предстоит пройти путь из дома в школу, ",
                   "    но этот путь будет не так прост, как Вам кажется.",
                   "    На пути будет множество препятствий, которые ",
-                  "    необходимо преодолеть. Удачи!"]
+                  "    необходимо преодолеть. Удачи!",
+                  "",
+                  "",
+                  "    УРОВЕНЬ"]
 
     fon = pygame.transform.scale(load_image('project_start_fon.jpg'), (size))
     screen.blit(fon, (0, 0))
@@ -38,18 +43,41 @@ def start_screen():
         intro_rect.x = 10
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
-
+    color1 = (255, 255, 255)
+    color2 = (255, 255, 255)
+    level_chosen = 0
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                return  # начинаем игру
+                if level1_rect.collidepoint(pygame.mouse.get_pos()):
+                    color1 = (0, 255, 0)
+                    color2 = (255, 255, 255)
+                    print(pygame.mouse.get_pos())
+                    level_chosen = 1
+                elif level2_rect.collidepoint(pygame.mouse.get_pos()):
+                    color1 = (255, 255, 255)
+                    color2 = (0, 255, 0)
+                    print(pygame.mouse.get_pos())
+                    level_chosen = 2
+                else:
+                    print(pygame.mouse.get_pos())
+                    if level_chosen != 0:
+                        return level_chosen
+                    else:
+                        pass
+                    # начинаем игру
+        # тут рисуем женщин на выбор
+        level1_rect = pygame.draw.rect(screen, color1, (190, 328, 30, 30), 40)
+        level2_rect = pygame.draw.rect(screen, color2, (280, 328, 30, 30), 40)
         pygame.display.flip()
         clock.tick(FPS)
 
 
+
 def next_screen():
+    pygame.mixer.music.stop()
     intro_text = ["                           ВЫБЕРИТЕ ПЕРСОНАЖА", "",
                   "             КСЮША              МАША                СТЕША"]
 
@@ -146,31 +174,47 @@ trap_list = [Trap(300, 320, (35, 35), './data/book.png'),
 fon_image = load_image("fon2.png")
 fon_rect = pygame.transform.scale(fon_image, (1200, 400))
 
-
-
 # начинается игра
 start_screen()
 hero_chosen = next_screen()
 # загружаем нужного персонажа
 hero_list = load_hero_images(hero_chosen)
+
+
 def game_over():
+    load_music("sounds/физика.mp3").play()
     fon = pygame.transform.scale(load_image('game_over.jpg'), (size))
     screen.blit(fon, (0, 0))
+    color1 = (255, 255, 255)
+    start_chosen = 0
     while True:
-        pygame.display.flip()
-        clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.KEYDOWN:
-                return True
+            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                if start_rect.collidepoint(pygame.mouse.get_pos()):
+                    color1 = (0, 255, 0)
+                    print(pygame.mouse.get_pos())
+                    start_chosen = 1
+                    start_screen()
+                else:
+                    print(pygame.mouse.get_pos())
+                    if start_chosen != 0:
+                        return start_chosen
+                    else:
+                        pass
+                    # начинаем игру
+        # тут рисуем женщин на выбор
+        start_rect = pygame.draw.rect(screen, color1, (450, 270, 50, 30), 40)
+        pygame.display.flip()
+        clock.tick(FPS)
+        pygame.display.update()
 
 x_b = 0
 trap_list = []
 for i in range(5):
     x_b += random.randint(300, 800) + 150
     trap_list.append(Trap(x_b, 360, (30, 30), './data/book.png'))
-
 
 is_try_again = True
 while is_try_again:
@@ -185,6 +229,7 @@ while is_try_again:
     dy = 0
     y = 350
     is_jump = False
+    sound2 = pygame.mixer.Sound('sounds/bye.mp3')
     while is_game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -193,6 +238,8 @@ while is_try_again:
                 if event.key == pygame.K_SPACE and not is_jump:
                     dy = -5
                     is_jump = True
+                    sound2.play()
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 pass
         x_fon -= fon_speed
@@ -224,7 +271,6 @@ while is_try_again:
                 path_list = ['data/luzha.png' for _ in range(7)]
                 hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
                 is_game_over = False
-
 
         screen.blit(hero_list[n_card], (50, y - 40))
 
