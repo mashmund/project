@@ -161,7 +161,7 @@ class Trap:
         self.img_rect = pygame.transform.scale(self.img_rect, self.size)
 
 
-# класс с монетками
+# класс с монетами
 class Money:
     def __init__(self, x, y, size: tuple, img):
         self.x = x

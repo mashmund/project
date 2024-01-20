@@ -42,7 +42,7 @@ def load_hero_images(hero_chosen):
     return hero_list
 
 
-# функция вывода текста
+# функция вывод текста
 def print_text(x, y, text, color, screen):
     font = pygame.font.Font(None, 40)
     font_rend = font.render(text,1, color)
