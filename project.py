@@ -7,6 +7,7 @@ import pygame
 from sup_func import *
 
 FPS = 50
+# размер экрана
 size = width, height = 600, 400
 
 pygame.init()
@@ -19,6 +20,7 @@ def terminate():
     sys.exit()
 
 
+# начальный экран
 def start_screen():
     load_music("sounds/mistika.mp3").play()
     intro_text = ["                        ШКОЛА: НЕТ ПУТИ ДОМОЙ", "",
@@ -29,7 +31,7 @@ def start_screen():
                   "    необходимо преодолеть. Удачи!",
                   "",
                   "",
-                  "    УРОВЕНЬ"]
+                  "    УРОВЕНЬ:           ЛЕГКИЙ                   СРЕДНИЙ"]
 
     fon = pygame.transform.scale(load_image('project_start_fon.jpg'), (size))
     screen.blit(fon, (0, 0))
@@ -50,6 +52,7 @@ def start_screen():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
+            # работа с кнопками для выбора персонажа
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 if level1_rect.collidepoint(pygame.mouse.get_pos()):
                     color1 = (0, 255, 0)
@@ -69,12 +72,13 @@ def start_screen():
                         pass
                     # начинаем игру
         # тут рисуем женщин на выбор
-        level1_rect = pygame.draw.rect(screen, color1, (190, 328, 30, 30), 40)
-        level2_rect = pygame.draw.rect(screen, color2, (280, 328, 30, 30), 40)
+        level1_rect = pygame.draw.rect(screen, color1, (170, 328, 30, 30), 40)
+        level2_rect = pygame.draw.rect(screen, color2, (365, 328, 30, 30), 40)
         pygame.display.flip()
         clock.tick(FPS)
 
 
+# экран выбора персонажа
 def next_screen():
     pygame.mixer.music.stop()
     intro_text = ["                           ВЫБЕРИТЕ ПЕРСОНАЖА", "",
@@ -147,6 +151,7 @@ def next_screen():
         clock.tick(FPS)
 
 
+# класс с препятствиями
 class Trap:
     def __init__(self, x, y, size: tuple, img):
         self.x = x
@@ -155,6 +160,8 @@ class Trap:
         self.img_rect = load_image(img)
         self.img_rect = pygame.transform.scale(self.img_rect, self.size)
 
+
+# класс с монетками
 class Money:
     def __init__(self, x, y, size: tuple, img):
         self.x = x
@@ -187,12 +194,13 @@ hero_chosen = next_screen()
 hero_list = load_hero_images(hero_chosen)
 
 
+# экран окончания
 def game_over(is_rec):
     load_music("sounds/физика.mp3").play()
     fon = pygame.transform.scale(load_image('game_over.jpg'), (size))
     screen.blit(fon, (0, 0))
     if is_rec:
-        print_text(0,0, 'Новый рекорд', (255,255,255),screen)
+        print_text(0, 0, 'Новый рекорд', (255, 255, 255), screen)
     color1 = (255, 255, 255)
     start_chosen = 0
     while True:
@@ -219,22 +227,27 @@ def game_over(is_rec):
         clock.tick(FPS)
         pygame.display.update()
 
+
+# функция генерирования препятствий-книг
 def generate_trap(n, delta):
     x_b = 0
     trap_list = []
     for i in range(n):
-        x_b += random.randint(300, 300+delta) + 100
+        x_b += random.randint(300, 300 + delta) + 100
         trap_list.append(Trap(x_b, 340, (50, 50), './data/book.png'))
     return trap_list
 
+
+# функция генерирования монет
 def generate_money(n, trap_list):
     money_list = []
     for i in range(n):
         x_money = trap_list[i].x + 500
-        y_money = random.randint(100,330)
-        money_list.append(Money(x_money, y_money, (50,50), './data/coin.png'))
+        y_money = random.randint(100, 330)
+        money_list.append(Money(x_money, y_money, (50, 50), './data/coin.png'))
 
     return money_list
+
 
 is_try_again = True
 while is_try_again:
@@ -245,7 +258,7 @@ while is_try_again:
 
     hero_list = load_hero_images(hero_chosen)
 
-    trap_list = generate_trap(4,500)
+    trap_list = generate_trap(4, 500)
     money_list = generate_money(4, trap_list)
 
     x_fon = 0
@@ -257,6 +270,7 @@ while is_try_again:
     level_count = 1
     money_count = 0
 
+    # прописываем прыжок
     while is_game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -272,7 +286,7 @@ while is_try_again:
         x_fon -= fon_speed
         n_card += 1
         if len(trap_list) <= 0:
-            trap_list = generate_trap(6,300)
+            trap_list = generate_trap(6, 300)
             fon_speed += 1
             level_count += 1
 
@@ -312,7 +326,7 @@ while is_try_again:
             money.x -= fon_speed
 
         print_text(30, 30, f'{level_count} уровень', (0, 0, 0), screen)
-        print_text(width-60, 30, f'{money_count}', (0,0,0), screen)
+        print_text(width - 200, 30, f'Монеты: {money_count}', (0, 0, 0), screen)
 
         screen.blit(hero_list[n_card], (50, y - 40))
 

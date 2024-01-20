@@ -4,6 +4,7 @@ import pygame
 import sys
 
 
+# функция загрузки изображения
 def load_image(name):
     fullname = os.path.join('', name)
     # если файл не существует, то выходим
@@ -14,6 +15,7 @@ def load_image(name):
     return image
 
 
+# функция загрузки звука
 def load_music(name):
     fullname = name
     # если файл не существует, то выходим
@@ -23,6 +25,7 @@ def load_music(name):
     return pygame.mixer.Sound(fullname)
 
 
+# функция загрузки изображения персонажа
 def load_hero_images(hero_chosen):
     if hero_chosen == 1:
         path_list = ['running K/00.png', 'running K/00.png', 'running K/ksusha_2.png', 'running K/ksusha_2.png',
@@ -38,16 +41,21 @@ def load_hero_images(hero_chosen):
         hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
     return hero_list
 
+
+# функция вывода текста
 def print_text(x, y, text, color, screen):
-    font = pygame.font.Font(None, 30)
+    font = pygame.font.Font(None, 40)
     font_rend = font.render(text,1, color)
     screen.blit(font_rend,(x,y))
 
+
+# функция сохранения результата в тхт
 def save_record_to_txt(path, level, money):
     with open(path, 'w') as f:
         f.write(f'{level};{money}')
 
 
+# функция записи результата в тхт файл
 def check_record(path, level):
     with open(path, 'r') as f:
         rec_level, rec_money = map(int,f.readline().split(';'))
