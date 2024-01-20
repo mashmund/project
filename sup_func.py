@@ -37,3 +37,21 @@ def load_hero_images(hero_chosen):
                      'runningS/stesha_2.png', 'runningS/stesha_0.png', 'runningS/stesha_0.png']
         hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
     return hero_list
+
+def print_text(x, y, text, color, screen):
+    font = pygame.font.Font(None, 30)
+    font_rend = font.render(text,1, color)
+    screen.blit(font_rend,(x,y))
+
+def save_record_to_txt(path, level, money):
+    with open(path, 'w') as f:
+        f.write(f'{level};{money}')
+
+
+def check_record(path, level):
+    with open(path, 'r') as f:
+        rec_level, rec_money = map(int,f.readline().split(';'))
+        if level > rec_level:
+            return True
+        else:
+            return False

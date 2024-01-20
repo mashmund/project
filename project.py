@@ -107,7 +107,13 @@ def next_screen():
     color3 = (255, 255, 255)
     hero_chosen = 0
     while True:
+        # тут рисуем женщин на выбор
+        ksusha_rect = pygame.draw.rect(screen, color1, (115, 150, 30, 30), 40)
+        maria_rect = pygame.draw.rect(screen, color2, (280, 150, 30, 30), 40)
+        stesha_rect = pygame.draw.rect(screen, color3, (445, 150, 30, 30), 40)
+
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
@@ -136,10 +142,7 @@ def next_screen():
                     else:
                         pass
                     # начинаем игру
-        # тут рисуем женщин на выбор
-        ksusha_rect = pygame.draw.rect(screen, color1, (115, 150, 30, 30), 40)
-        maria_rect = pygame.draw.rect(screen, color2, (280, 150, 30, 30), 40)
-        stesha_rect = pygame.draw.rect(screen, color3, (445, 150, 30, 30), 40)
+
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -166,8 +169,10 @@ n_card = 0
 dy = 0
 y = 350
 is_jump = False
-trap_list = [Trap(300, 320, (50, 50), './data/book.png'),
-             Trap(900, 320, (50, 50), './data/book.png')]
+
+font = pygame.font.Font(None, 30)
+
+sound2 = pygame.mixer.Sound('sounds/bye.mp3')
 
 # Работаем с изображениями
 fon_image = load_image("fon2.png")
@@ -180,13 +185,16 @@ hero_chosen = next_screen()
 hero_list = load_hero_images(hero_chosen)
 
 
-def game_over():
+def game_over(is_rec):
     load_music("sounds/физика.mp3").play()
     fon = pygame.transform.scale(load_image('game_over.jpg'), (size))
     screen.blit(fon, (0, 0))
+    if is_rec:
+        print_text(0,0, 'Новый рекорд', (255,255,255),screen)
     color1 = (255, 255, 255)
     start_chosen = 0
     while True:
+        start_rect = pygame.draw.rect(screen, color1, (450, 270, 50, 30), 40)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
@@ -195,7 +203,7 @@ def game_over():
                     # color1 = (0, 255, 0)
                     print(pygame.mouse.get_pos())
                     start_chosen = 1
-                    next_screen()
+                    return next_screen()
                 else:
                     print(pygame.mouse.get_pos())
                     if start_chosen != 0:
@@ -204,32 +212,39 @@ def game_over():
                         pass
                     # начинаем игру
         # тут рисуем женщин на выбор
-        start_rect = pygame.draw.rect(screen, color1, (450, 270, 50, 30), 40)
+
         pygame.display.flip()
         clock.tick(FPS)
         pygame.display.update()
 
-
-x_b = 0
-trap_list = []
-for i in range(10):
-    x_b += random.randint(300, 800) + 100
-    trap_list.append(Trap(x_b, 340, (50, 50), './data/book.png'))
+def generate_trap(n, delta):
+    x_b = 0
+    trap_list = []
+    for i in range(n):
+        x_b += random.randint(300, 300+delta) + 100
+        trap_list.append(Trap(x_b, 340, (50, 50), './data/book.png'))
+    return trap_list
 
 is_try_again = True
 while is_try_again:
     print('Я продолжаюсь')
     is_game = True
     is_game_over = True
-    count_luzha = 0
+    is_jump = False
+
     hero_list = load_hero_images(hero_chosen)
+
+    trap_list = generate_trap(1,500)
+
     x_fon = 0
     fon_speed = 2
     n_card = 0
     dy = 0
     y = 350
-    is_jump = False
-    sound2 = pygame.mixer.Sound('sounds/bye.mp3')
+
+    level_count = 1
+    money_count = 0
+
     while is_game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -239,11 +254,16 @@ while is_try_again:
                     dy = -8
                     is_jump = True
                     sound2.play()
-
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 pass
+
         x_fon -= fon_speed
         n_card += 1
+        if len(trap_list) <= 0:
+            trap_list = generate_trap(6,300)
+            fon_speed += 1
+            level_count += 1
+
         if x_fon <= -600:
             x_fon = 0
         if n_card % 7 == 0:
@@ -262,15 +282,21 @@ while is_try_again:
         screen.blit(fon_rect, (x_fon, 0))
         ground = pygame.draw.rect(screen, (100, 100, 100), (0, 340, 600, 400), 40)
 
-        for trap in trap_list:
+        for trap in trap_list[::-1]:
             screen.blit(trap.img_rect, (trap.x, trap.y))
             trap.x -= fon_speed
-            if trap.img_rect.get_rect(topleft=(trap.x, trap.y)).colliderect(
-                    hero_list[n_card].get_rect(topleft=(50, y - 40))):
-                fon_speed = 0
-                path_list = ['data/luzha.png' for _ in range(7)]
-                hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
-                is_game_over = False
+            if trap.x < 0:
+                trap_list.remove(trap)
+            else:
+                if trap.img_rect.get_rect(topleft=(trap.x, trap.y)).colliderect(
+                        hero_list[n_card].get_rect(topleft=(50, y - 40))):
+                    fon_speed = 0
+                    path_list = ['data/luzha.png' for _ in range(7)]
+                    hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
+                    is_game_over = False
+
+        print_text(30, 30, f'{level_count} уровень', (0, 0, 0), screen)
+        print_text(width-60, 30, f'{money_count}', (0,0,0), screen)
 
         screen.blit(hero_list[n_card], (50, y - 40))
 
@@ -279,6 +305,9 @@ while is_try_again:
 
         if not is_game_over:
             pygame.time.delay(2000)
+            is_rec = check_record('./record.txt', level_count)
+            if is_rec:
+                save_record_to_txt('./record.txt', level_count, money_count)
             is_game = False
 
-    is_try_again = game_over()
+    is_try_again = game_over(is_rec)
