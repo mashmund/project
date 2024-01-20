@@ -147,13 +147,15 @@ def next_screen():
         clock.tick(FPS)
 
 
-class Hero:
-    def __init__(self):
-        # x, y, rect
-        pass
-
-
 class Trap:
+    def __init__(self, x, y, size: tuple, img):
+        self.x = x
+        self.y = y
+        self.size = size
+        self.img_rect = load_image(img)
+        self.img_rect = pygame.transform.scale(self.img_rect, self.size)
+
+class Money:
     def __init__(self, x, y, size: tuple, img):
         self.x = x
         self.y = y
@@ -225,6 +227,15 @@ def generate_trap(n, delta):
         trap_list.append(Trap(x_b, 340, (50, 50), './data/book.png'))
     return trap_list
 
+def generate_money(n, trap_list):
+    money_list = []
+    for i in range(n):
+        x_money = trap_list[i].x + 500
+        y_money = random.randint(100,330)
+        money_list.append(Money(x_money, y_money, (50,50), './data/coin.png'))
+
+    return money_list
+
 is_try_again = True
 while is_try_again:
     print('Я продолжаюсь')
@@ -234,7 +245,8 @@ while is_try_again:
 
     hero_list = load_hero_images(hero_chosen)
 
-    trap_list = generate_trap(1,500)
+    trap_list = generate_trap(4,500)
+    money_list = generate_money(4, trap_list)
 
     x_fon = 0
     fon_speed = 2
@@ -294,6 +306,10 @@ while is_try_again:
                     path_list = ['data/luzha.png' for _ in range(7)]
                     hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
                     is_game_over = False
+
+        for money in money_list[::-1]:
+            screen.blit(money.img_rect, (money.x, money.y))
+            money.x -= fon_speed
 
         print_text(30, 30, f'{level_count} уровень', (0, 0, 0), screen)
         print_text(width-60, 30, f'{money_count}', (0,0,0), screen)
