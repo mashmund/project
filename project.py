@@ -75,7 +75,6 @@ def start_screen():
         clock.tick(FPS)
 
 
-
 def next_screen():
     pygame.mixer.music.stop()
     intro_text = ["                           ВЫБЕРИТЕ ПЕРСОНАЖА", "",
@@ -167,8 +166,8 @@ n_card = 0
 dy = 0
 y = 350
 is_jump = False
-trap_list = [Trap(300, 320, (35, 35), './data/book.png'),
-             Trap(900, 320, (35, 35), './data/book.png')]
+trap_list = [Trap(300, 320, (50, 50), './data/book.png'),
+             Trap(900, 320, (50, 50), './data/book.png')]
 
 # Работаем с изображениями
 fon_image = load_image("fon2.png")
@@ -193,10 +192,10 @@ def game_over():
                 terminate()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 if start_rect.collidepoint(pygame.mouse.get_pos()):
-                    color1 = (0, 255, 0)
+                    # color1 = (0, 255, 0)
                     print(pygame.mouse.get_pos())
                     start_chosen = 1
-                    start_screen()
+                    next_screen()
                 else:
                     print(pygame.mouse.get_pos())
                     if start_chosen != 0:
@@ -210,11 +209,12 @@ def game_over():
         clock.tick(FPS)
         pygame.display.update()
 
+
 x_b = 0
 trap_list = []
-for i in range(5):
-    x_b += random.randint(300, 800) + 150
-    trap_list.append(Trap(x_b, 360, (30, 30), './data/book.png'))
+for i in range(10):
+    x_b += random.randint(300, 800) + 100
+    trap_list.append(Trap(x_b, 340, (50, 50), './data/book.png'))
 
 is_try_again = True
 while is_try_again:
@@ -236,7 +236,7 @@ while is_try_again:
                 terminate()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and not is_jump:
-                    dy = -5
+                    dy = -8
                     is_jump = True
                     sound2.play()
 
