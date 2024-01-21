@@ -198,7 +198,7 @@ sound4 = load_music('sounds/jump2.mp3')
 sound5 = load_music('sounds/coin.mp3')
 
 # Работаем с изображениями
-fon_image = load_image("data/fon5.jpg")
+fon_image = load_image("data/fon100.jpg")
 fon_rect = pygame.transform.scale(fon_image, (1200, 400))
 
 # начинается игра
