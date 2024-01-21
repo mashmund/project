@@ -3,6 +3,8 @@ import os
 import pygame
 import sys
 
+import random
+
 
 # функция загрузки изображения
 def load_image(name):
@@ -63,3 +65,5 @@ def check_record(path, level):
             return True
         else:
             return False
+
+
