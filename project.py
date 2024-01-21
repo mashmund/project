@@ -37,8 +37,9 @@ def start_screen():
                   '    На пути будет множество препятствий, которые ',
                   '    необходимо преодолеть. Удачи!',
                   '',
+                  'ВЫБЕРИТЕ УРОВЕНЬ:         ЛЕГКИЙ                 СРЕДНИЙ',
                   '',
-                  '    УРОВЕНЬ:           ЛЕГКИЙ                   СРЕДНИЙ']
+                  '               Нажмите пробел для выбора персонажа']
 
     fon = pygame.transform.scale(load_image('project_start_fon.jpg'), (size))
     screen.blit(fon, (0, 0))
@@ -66,22 +67,18 @@ def start_screen():
                 if level1_rect.collidepoint(pygame.mouse.get_pos()):
                     color1 = (255, 0, 0)
                     color2 = (255, 255, 255)
-                    print(pygame.mouse.get_pos())
                     level_chosen = 1
                 elif level2_rect.collidepoint(pygame.mouse.get_pos()):
                     color1 = (255, 255, 255)
                     color2 = (255, 0, 0)
-                    print(pygame.mouse.get_pos())
                     level_chosen = 2
                 else:
-                    print(pygame.mouse.get_pos())
                     if level_chosen != 0:
                         return level_chosen
                     else:
                         pass
                     # начинаем игру
         # тут рисуем женщин на выбор
-
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -90,22 +87,36 @@ def start_screen():
 def next_screen():
     pygame.mixer.music.stop()
     intro_text = ['                           ВЫБЕРИТЕ ПЕРСОНАЖА', '',
-                  '             КСЮША              МАША                СТЕША']
+                  '             КСЮША              МАША                СТЕША'
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '                  Нажмите пробел, чтобы начать игру']
 
     fon = pygame.transform.scale(load_image('f2.jpg'), (size))
     screen.blit(fon, (0, 0))
+
     image_k = load_image('running K/00.png').convert_alpha()
     ksusha_image = pygame.transform.scale(image_k, (100, 135))
     screen.blit(ksusha_image, (75, 200))
+
     image_m = load_image('runningM/maria_0.png').convert_alpha()
     masha_image = pygame.transform.scale(image_m, (100, 135))
     screen.blit(masha_image, (245, 200))
+
     image_s = load_image('runningS/stesha_0.png').convert_alpha()
     stesha_image = pygame.transform.scale(image_s, (100, 135))
     screen.blit(stesha_image, (415, 200))
+
     font = pygame.font.Font(None, 30)
     text_coord = 50
     pygame.display.flip()
+
     for line in intro_text:
         string_rendered = font.render(line, 1, pygame.Color('white'))
         intro_rect = string_rendered.get_rect()
@@ -125,7 +136,6 @@ def next_screen():
         stesha_rect = pygame.draw.rect(screen, color3, (445, 150, 30, 30), 40)
 
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
@@ -133,28 +143,26 @@ def next_screen():
                     color1 = (0, 255, 0)
                     color2 = (255, 255, 255)
                     color3 = (255, 255, 255)
-                    print(pygame.mouse.get_pos())
                     hero_chosen = 1
                 elif maria_rect.collidepoint(pygame.mouse.get_pos()):
                     color1 = (255, 255, 255)
                     color2 = (255, 0, 0)
                     color3 = (255, 255, 255)
-                    print(pygame.mouse.get_pos())
                     hero_chosen = 2
                 elif stesha_rect.collidepoint(pygame.mouse.get_pos()):
                     color1 = (255, 255, 255)
                     color2 = (255, 255, 255)
                     color3 = (0, 0, 255)
-                    print(pygame.mouse.get_pos())
                     hero_chosen = 3
                 else:
-                    print(pygame.mouse.get_pos())
                     if hero_chosen != 0:
                         return hero_chosen
                     else:
-                        pass
-                    # начинаем игру
+                        print('Выберите персонажа!')
+            elif event.type == pygame.K_SPACE:
+                return
 
+        # начинаем игру
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -177,17 +185,13 @@ def game_over(is_rec):
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 if start_rect.collidepoint(pygame.mouse.get_pos()):
                     # color1 = (255, 0, 0)
-                    print(pygame.mouse.get_pos())
                     # start_chosen = 1
                     return next_screen()
                 else:
-                    print(pygame.mouse.get_pos())
                     if start_chosen != 0:
                         return start_chosen
                     else:
                         pass
-                    # начинаем игру
-        # тут рисуем женщин на выбор
 
         pygame.display.flip()
         clock.tick(FPS)
@@ -315,7 +319,6 @@ hero_list = load_hero_images(hero_chosen)
 
 is_try_again = True
 while is_try_again:
-    print('Я продолжаюсь')
     is_game = True
     is_game_over = True
     is_jump = False
@@ -362,7 +365,6 @@ while is_try_again:
             x_fon = 0
 
         # отрисовка всех штук на экране
-
         screen.blit(fon_rect, (x_fon, 0))
         ground = pygame.draw.rect(screen, (100, 100, 100), (0, 340, 600, 400), 40)
 
