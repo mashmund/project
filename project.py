@@ -13,6 +13,7 @@ size = width, height = 600, 400
 pygame.init()
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
+pygame.display.set_caption('Школа: нет пути домой')
 
 
 def terminate():
@@ -181,9 +182,9 @@ is_jump = False
 
 font = pygame.font.Font(None, 30)
 
-sound2 = pygame.mixer.Sound('sounds/bye.mp3')
-sound4 = pygame.mixer.Sound('sounds/jump2.mp3')
-sound5 = pygame.mixer.Sound('sounds/coin.mp3')
+sound2 = load_music('sounds/bye.mp3')
+sound4 = load_music('sounds/jump2.mp3')
+sound5 = load_music('sounds/coin.mp3')
 
 # Работаем с изображениями
 fon_image = load_image("data/fon5.jpg")
