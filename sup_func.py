@@ -58,7 +58,7 @@ def save_record_to_txt(path, level, money):
 # функция записи результата в тхт файл
 def check_record(path, level):
     with open(path, 'r') as f:
-        rec_level, rec_money = map(int,f.readline().split(';'))
+        rec_level, rec_money = map(int, f.readline().split(';'))
         if level > rec_level:
             return True
         else:

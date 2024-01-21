@@ -203,12 +203,11 @@ def game_over(is_rec):
     screen.blit(fon, (0, 0))
     if is_rec:
         print_text(0, 0, 'Новый рекорд', (255, 255, 255), screen)
-        print_text(300, 200, 'Новый рекорд', (255, 255, 255), screen)
-        print_text(200, 300, 'Новый рекорд', (255, 255, 255), screen)
     color1 = (255, 255, 255)
     start_chosen = 0
     while True:
         start_rect = pygame.draw.rect(screen, color1, (450, 270, 50, 30), 40)
+        print_text(300, 310, 'Играть еще раз', (255, 255, 255), screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
@@ -263,7 +262,7 @@ while is_try_again:
     hero_list = load_hero_images(hero_chosen)
 
     trap_list = generate_trap(4, 500)
-    money_list = generate_money(4, trap_list)
+    money_list = generate_money(3, trap_list)
 
     x_fon = 0
     fon_speed = 2
