@@ -23,23 +23,23 @@ def terminate():
 
 # начальный экран
 def start_screen():
-    load_music("sounds/mistika.mp3").play()
-    intro_text = ["                        ШКОЛА: НЕТ ПУТИ ДОМОЙ", "",
-                  "    Добро пожаловать в игру 'Школа: нет пути домой'!",
-                  "    В игре Вам предстоит пройти путь из дома в школу, ",
-                  "    но этот путь будет не так прост, как Вам кажется.",
-                  "    На пути будет множество препятствий, которые ",
-                  "    необходимо преодолеть. Удачи!",
-                  "",
-                  "",
-                  "    УРОВЕНЬ:           ЛЕГКИЙ                   СРЕДНИЙ"]
+    load_music('sounds/mistika.mp3').play()
+    intro_text = ['                        ШКОЛА: НЕТ ПУТИ ДОМОЙ', '',
+                  '    Добро пожаловать в игру "Школа: нет пути домой"!',
+                  '    В игре Вам предстоит пройти путь из дома в школу, ',
+                  '    но этот путь будет не так прост, как Вам кажется.',
+                  '    На пути будет множество препятствий, которые ',
+                  '    необходимо преодолеть. Удачи!',
+                  '',
+                  '',
+                  '    УРОВЕНЬ:           ЛЕГКИЙ                   СРЕДНИЙ']
 
     fon = pygame.transform.scale(load_image('project_start_fon.jpg'), (size))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
     text_coord = 50
     for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('white'))
+        string_rendered = font.render(line, 1, pygame.Color("white"))
         intro_rect = string_rendered.get_rect()
         text_coord += 10
         intro_rect.top = text_coord
@@ -56,13 +56,13 @@ def start_screen():
             # работа с кнопками для выбора персонажа
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 if level1_rect.collidepoint(pygame.mouse.get_pos()):
-                    color1 = (0, 255, 0)
+                    color1 = (255, 0, 0)
                     color2 = (255, 255, 255)
                     print(pygame.mouse.get_pos())
                     level_chosen = 1
                 elif level2_rect.collidepoint(pygame.mouse.get_pos()):
                     color1 = (255, 255, 255)
-                    color2 = (0, 255, 0)
+                    color2 = (255, 0, 0)
                     print(pygame.mouse.get_pos())
                     level_chosen = 2
                 else:
@@ -82,8 +82,8 @@ def start_screen():
 # экран выбора персонажа
 def next_screen():
     pygame.mixer.music.stop()
-    intro_text = ["                           ВЫБЕРИТЕ ПЕРСОНАЖА", "",
-                  "             КСЮША              МАША                СТЕША"]
+    intro_text = ['                           ВЫБЕРИТЕ ПЕРСОНАЖА', '',
+                  '             КСЮША              МАША                СТЕША']
 
     fon = pygame.transform.scale(load_image('f2.jpg'), (size))
     screen.blit(fon, (0, 0))
@@ -214,9 +214,9 @@ def game_over(is_rec):
                 terminate()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 if start_rect.collidepoint(pygame.mouse.get_pos()):
-                    # color1 = (0, 255, 0)
+                    # color1 = (255, 0, 0)
                     print(pygame.mouse.get_pos())
-                    start_chosen = 1
+                    # start_chosen = 1
                     return next_screen()
                 else:
                     print(pygame.mouse.get_pos())
