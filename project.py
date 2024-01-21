@@ -216,21 +216,36 @@ def game_over(is_rec):
     start_chosen = 0
     while True:
         start_rect = pygame.draw.rect(screen, color1, (450, 270, 50, 30), 40)
-        print_text(300, 310, 'Играть еще раз', (255, 255, 255), screen)
+        intro_text = ['', '',
+                      ''
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '                  Нажмите пробел, чтобы начать игру']
+        font = pygame.font.Font(None, 30)
+        text_coord = 50
+        pygame.display.flip()
+
+        for line in intro_text:
+            string_rendered = font.render(line, 1, pygame.Color('white'))
+            intro_rect = string_rendered.get_rect()
+            text_coord += 10
+            intro_rect.top = text_coord
+            intro_rect.x = 10
+            text_coord += intro_rect.height
+            screen.blit(string_rendered, intro_rect)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                if start_rect.collidepoint(pygame.mouse.get_pos()):
-                    # color1 = (255, 0, 0)
-                    # start_chosen = 1
+                if event.type == pygame.KEYDOWN or event.type == pygame.K_SPACE:
                     return next_screen()
-                else:
-                    if start_chosen != 0:
-                        return start_chosen
-                    else:
-                        pass
-
         pygame.display.flip()
         clock.tick(FPS)
         pygame.display.update()
