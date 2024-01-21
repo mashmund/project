@@ -31,7 +31,7 @@ def start_screen():
                   '    На пути будет множество препятствий, которые ',
                   '    необходимо преодолеть. Удачи!',
                   '',
-                  '    УРОВЕНЬ:           ЛЕГКИЙ                   СРЕДНИЙ',
+                  'ВЫБЕРИТЕ УРОВЕНЬ:         ЛЕГКИЙ                 СРЕДНИЙ',
                   '',
                   '               Нажмите пробел для выбора персонажа']
 
@@ -72,11 +72,8 @@ def start_screen():
             elif event.type == pygame.K_SPACE:
                 return
 
-
-                    # начинаем игру
-        # тут рисуем женщин на выбор
-        level1_rect = pygame.draw.rect(screen, color1, (170, 300, 30, 30), 40)
-        level2_rect = pygame.draw.rect(screen, color2, (365, 300, 30, 30), 40)
+        level1_rect = pygame.draw.rect(screen, color1, (250, 300, 30, 30), 40)
+        level2_rect = pygame.draw.rect(screen, color2, (435 , 300, 30, 30), 40)
         pygame.display.flip()
         clock.tick(FPS)
 
