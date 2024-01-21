@@ -65,12 +65,10 @@ def start_screen():
                     color2 = (255, 0, 0)
                     level_chosen = 2
                 else:
-                    if level_chosen != 0:
+                    if level_chosen != 0 and (event.type == pygame.KEYDOWN or event.type == pygame.K_SPACE):
                         return level_chosen
                     else:
                         print('Выберите уровень!')
-            elif event.type == pygame.K_SPACE:
-                return
 
         level1_rect = pygame.draw.rect(screen, color1, (250, 300, 30, 30), 40)
         level2_rect = pygame.draw.rect(screen, color2, (435 , 300, 30, 30), 40)
@@ -150,12 +148,10 @@ def next_screen():
                     color3 = (0, 0, 255)
                     hero_chosen = 3
                 else:
-                    if hero_chosen != 0:
+                    if hero_chosen != 0 and (event.type == pygame.KEYDOWN or event.type == pygame.K_SPACE):
                         return hero_chosen
                     else:
                         print('Выберите персонажа!')
-            elif event.type == pygame.K_SPACE:
-                return
 
         # начинаем игру
         pygame.display.flip()
