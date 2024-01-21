@@ -244,7 +244,7 @@ def game_over(is_rec):
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                if event.type == pygame.KEYDOWN or event.type == pygame.K_SPACE:
+                if event.type == pygame.K_SPACE or event.type == pygame.KEYDOWN:
                     return next_screen()
         pygame.display.flip()
         clock.tick(FPS)
