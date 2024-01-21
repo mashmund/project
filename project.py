@@ -182,9 +182,11 @@ is_jump = False
 font = pygame.font.Font(None, 30)
 
 sound2 = pygame.mixer.Sound('sounds/bye.mp3')
+sound4 = pygame.mixer.Sound('sounds/jump2.mp3')
+sound5 = pygame.mixer.Sound('sounds/coin.mp3')
 
 # Работаем с изображениями
-fon_image = load_image("fon2.png")
+fon_image = load_image("data/fon5.jpg")
 fon_rect = pygame.transform.scale(fon_image, (1200, 400))
 
 # начинается игра
@@ -201,6 +203,8 @@ def game_over(is_rec):
     screen.blit(fon, (0, 0))
     if is_rec:
         print_text(0, 0, 'Новый рекорд', (255, 255, 255), screen)
+        print_text(300, 200, 'Новый рекорд', (255, 255, 255), screen)
+        print_text(200, 300, 'Новый рекорд', (255, 255, 255), screen)
     color1 = (255, 255, 255)
     start_chosen = 0
     while True:
@@ -279,7 +283,7 @@ while is_try_again:
                 if event.key == pygame.K_SPACE and not is_jump:
                     dy = -8
                     is_jump = True
-                    sound2.play()
+                    sound4.play()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 pass
 
@@ -287,6 +291,7 @@ while is_try_again:
         n_card += 1
         if len(trap_list) <= 0:
             trap_list = generate_trap(6, 300)
+            money_list = generate_money(5, trap_list)
             fon_speed += 1
             level_count += 1
 
@@ -317,6 +322,7 @@ while is_try_again:
                 if trap.img_rect.get_rect(topleft=(trap.x, trap.y)).colliderect(
                         hero_list[n_card].get_rect(topleft=(50, y - 40))):
                     fon_speed = 0
+                    sound2.play()
                     path_list = ['data/luzha.png' for _ in range(7)]
                     hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
                     is_game_over = False
@@ -324,6 +330,14 @@ while is_try_again:
         for money in money_list[::-1]:
             screen.blit(money.img_rect, (money.x, money.y))
             money.x -= fon_speed
+            if money.x < 0:
+                money_list.remove(money)
+            else:
+                if money.img_rect.get_rect(topleft=(money.x, money.y)).colliderect(
+                        hero_list[n_card].get_rect(topleft=(50, y - 40))):
+                    sound5.play()
+                    money_list.remove(money)
+                    money_count += 1
 
         print_text(30, 30, f'{level_count} уровень', (0, 0, 0), screen)
         print_text(width - 200, 30, f'Монеты: {money_count}', (0, 0, 0), screen)
