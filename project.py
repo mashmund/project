@@ -1,4 +1,3 @@
-import os
 import random
 
 import time
@@ -24,11 +23,6 @@ def terminate():
 
 # начальный экран
 def start_screen():
-    if not os.path.exists('./record.txt'):
-        save_record_to_txt('./record.txt', 0, 0)
-    with open('./record.txt', 'r+') as f:
-        if not f.readline():
-            f.write('0;0')
     load_music('sounds/mistika.mp3').play()
     intro_text = ['                        ШКОЛА: НЕТ ПУТИ ДОМОЙ', '',
                   '    Добро пожаловать в игру "Школа: нет пути домой"!',
@@ -57,8 +51,6 @@ def start_screen():
     color2 = (255, 255, 255)
     level_chosen = 0
     while True:
-        level1_rect = pygame.draw.rect(screen, color1, (170, 328, 30, 30), 40)
-        level2_rect = pygame.draw.rect(screen, color2, (365, 328, 30, 30), 40)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
@@ -73,12 +65,13 @@ def start_screen():
                     color2 = (255, 0, 0)
                     level_chosen = 2
                 else:
-                    if level_chosen != 0:
+                    if level_chosen != 0 and (event.type == pygame.KEYDOWN or event.type == pygame.K_SPACE):
                         return level_chosen
                     else:
-                        pass
-                    # начинаем игру
-        # тут рисуем женщин на выбор
+                        print('Выберите уровень!')
+
+        level1_rect = pygame.draw.rect(screen, color1, (250, 300, 30, 30), 40)
+        level2_rect = pygame.draw.rect(screen, color2, (435 , 300, 30, 30), 40)
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -155,16 +148,61 @@ def next_screen():
                     color3 = (0, 0, 255)
                     hero_chosen = 3
                 else:
-                    if hero_chosen != 0:
+                    if hero_chosen != 0 and (event.type == pygame.KEYDOWN or event.type == pygame.K_SPACE):
                         return hero_chosen
                     else:
                         print('Выберите персонажа!')
-            elif event.type == pygame.K_SPACE:
-                return
 
         # начинаем игру
         pygame.display.flip()
         clock.tick(FPS)
+
+
+# класс с препятствиями
+class Trap:
+    def __init__(self, x, y, size: tuple, img):
+        self.x = x
+        self.y = y
+        self.size = size
+        self.img_rect = load_image(img)
+        self.img_rect = pygame.transform.scale(self.img_rect, self.size)
+
+
+# класс с монетами
+class Money:
+    def __init__(self, x, y, size: tuple, img):
+        self.x = x
+        self.y = y
+        self.size = size
+        self.img_rect = load_image(img)
+        self.img_rect = pygame.transform.scale(self.img_rect, self.size)
+
+
+# настройка переменных
+x_fon = 0
+fon_speed = 2
+n_card = 0
+dy = 0
+y = 350
+is_jump = False
+
+font = pygame.font.Font(None, 30)
+
+#загружаем музыку
+sound2 = load_music('sounds/bye.mp3')
+sound4 = load_music('sounds/jump2.mp3')
+sound5 = load_music('sounds/coin.mp3')
+
+# Работаем с изображениями
+fon_image = load_image("data/fon100.jpg")
+fon_rect = pygame.transform.scale(fon_image, (1200, 400))
+
+# начинается игра
+start_screen()
+hero_chosen = next_screen()
+
+# загружаем нужного персонажа
+hero_list = load_hero_images(hero_chosen)
 
 
 # экран окончания
@@ -204,7 +242,7 @@ def generate_trap(n, delta):
     trap_list = []
     for i in range(n):
         x_b += random.randint(300, 300 + delta) + 100
-        trap_list.append(Trap(x_b, 340, fon_speed, (50, 50), './data/book.png'))
+        trap_list.append(Trap(x_b, 340, (50, 50), './data/book.png'))
     return trap_list
 
 
@@ -214,108 +252,10 @@ def generate_money(n, trap_list):
     for i in range(n):
         x_money = trap_list[i].x + 500
         y_money = random.randint(100, 330)
-        money_list.append(Money(x_money, y_money, fon_speed, (50, 50), './data/coin.png'))
+        money_list.append(Money(x_money, y_money, (50, 50), './data/coin.png'))
 
     return money_list
 
-
-class Hero(pygame.sprite.Sprite):
-    def __init__(self, x, y, hero_chosen):
-        super().__init__(all_sprites)
-        self.n_cadr = 0
-        self.imgs = load_hero_images(hero_chosen)
-        self.image = self.imgs[self.n_cadr]
-        self.mask = pygame.mask.from_surface(self.image)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.dy = 0
-        self.is_jump = False
-        self.n_cadr = 0
-
-    def update(self):
-        if self.is_jump:
-            self.rect.y += self.dy
-            self.dy += 0.2
-        if self.rect.y >= 310:
-            self.rect.y = 310
-            self.is_jump = False
-            self.dy = 0
-        self.n_cadr += 1
-        self.image = self.imgs[self.n_cadr % 7]
-        self.mask = pygame.mask.from_surface(self.image)
-
-
-# класс с препятствиями
-class Trap(pygame.sprite.Sprite):
-    def __init__(self, x, y, fon_speed, size: tuple, img):
-        super().__init__(trap_sprites)
-        self.image = load_image(img)
-        self.size = size
-        self.image = pygame.transform.scale(self.image, self.size)
-        self.mask = pygame.mask.from_surface(self.image)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.fon_speed = fon_speed
-
-    def update(self):
-        self.rect.x -= self.fon_speed
-        if pygame.sprite.collide_mask(self, hero):
-            path_list = ['data/luzha.png' for _ in range(7)]
-            hero.imgs = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
-            self.fon_speed = 0
-            sound2.play()
-            # fon_speed = 0
-            # is_game_over = False
-        if self.rect.x <= 0:
-            self.kill()
-
-    def new_level(self):
-        self.fon_speed += 1
-
-
-# класс с монетами
-class Money(pygame.sprite.Sprite):
-    def __init__(self, x, y, fon_speed, size: tuple, img):
-        super().__init__(all_sprites)
-        self.img = load_image(img)
-        self.size = size
-        self.img = pygame.transform.scale(self.img, self.size)
-        self.rect = self.img.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.fon_speed = fon_speed
-
-    def update(self):
-        self.rect.x -= self.fon_speed
-
-    def new_level(self):
-        self.fon_speed += 1
-
-
-# настройка переменных
-x_fon = 0
-fon_speed = 2
-n_card = 0
-
-is_jump = False
-
-font = pygame.font.Font(None, 30)
-
-sound2 = load_music('sounds/bye.mp3')
-sound4 = load_music('sounds/jump2.mp3')
-sound5 = load_music('sounds/coin.mp3')
-
-# Работаем с изображениями
-fon_image = load_image("data/fon5.jpg")
-fon_rect = pygame.transform.scale(fon_image, (1200, 400))
-
-# начинается игра
-level_chosen = start_screen()
-hero_chosen = next_screen()
-# загружаем нужного персонажа
-hero_list = load_hero_images(hero_chosen)
 
 is_try_again = True
 while is_try_again:
@@ -323,20 +263,18 @@ while is_try_again:
     is_game_over = True
     is_jump = False
 
-    all_sprites = pygame.sprite.Group()
-    trap_sprites = pygame.sprite.Group()
-    hero = Hero(50, 310, hero_chosen)
+    hero_list = load_hero_images(hero_chosen)
 
     trap_list = generate_trap(4, 500)
-    # money_list = generate_money(3, trap_list)
+    money_list = generate_money(3, trap_list)
+
     x_fon = 0
+    fon_speed = 2
+    n_card = 0
+    dy = 0
     y = 350
-    if level_chosen == 1:
-        fon_speed = 2
-        level_count = 1
-    elif level_chosen == 2:
-        fon_speed = 4
-        level_count = 3
+
+    level_count = 1
     money_count = 0
 
     # прописываем прыжок
@@ -345,47 +283,68 @@ while is_try_again:
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and not hero.is_jump:
-                    hero.dy = -8
-                    hero.is_jump = True
+                if event.key == pygame.K_SPACE and not is_jump:
+                    dy = -8
+                    is_jump = True
                     sound4.play()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 pass
 
         x_fon -= fon_speed
-        print(len(trap_sprites))
-
-        if len(trap_sprites) <= 0:
+        n_card += 1
+        if len(trap_list) <= 0:
             trap_list = generate_trap(6, 300)
-            # money_list = generate_money(5, trap_list)
+            money_list = generate_money(5, trap_list)
             fon_speed += 1
             level_count += 1
 
         if x_fon <= -600:
             x_fon = 0
+        if n_card % 7 == 0:
+            n_card = 0
+        # гравитация
+        y += dy
+        dy += 0.2
+
+        if y >= 350:
+            y = 350
+            dy = 0
+            is_jump = False
 
         # отрисовка всех штук на экране
         screen.blit(fon_rect, (x_fon, 0))
         ground = pygame.draw.rect(screen, (100, 100, 100), (0, 340, 600, 400), 40)
 
-        # for money in money_list[::-1]:
-        #     screen.blit(money.img_rect, (money.x, money.y))
-        #     money.x -= fon_speed
-        #     if money.x < 0:
-        #         money_list.remove(money)
-        #     else:
-        #         if money.img_rect.get_rect(topleft=(money.x, money.y)).colliderect(
-        #                 hero_list[n_card].get_rect(topleft=(50, y - 40))):
-        #             sound5.play()
-        #             money_list.remove(money)
-        #             money_count += 1
+        for trap in trap_list[::-1]:
+            screen.blit(trap.img_rect, (trap.x, trap.y))
+            trap.x -= fon_speed
+            if trap.x < 0:
+                trap_list.remove(trap)
+            else:
+                if trap.img_rect.get_rect(topleft=(trap.x, trap.y)).colliderect(
+                        hero_list[n_card].get_rect(topleft=(50, y - 40))):
+                    fon_speed = 0
+                    sound2.play()
+                    path_list = ['data/luzha.png' for _ in range(7)]
+                    hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
+                    is_game_over = False
 
-        all_sprites.draw(screen)
-        trap_sprites.draw(screen)
-        all_sprites.update()
-        trap_sprites.update()
+        for money in money_list[::-1]:
+            screen.blit(money.img_rect, (money.x, money.y))
+            money.x -= fon_speed
+            if money.x < 0:
+                money_list.remove(money)
+            else:
+                if money.img_rect.get_rect(topleft=(money.x, money.y)).colliderect(
+                        hero_list[n_card].get_rect(topleft=(50, y - 40))):
+                    sound5.play()
+                    money_list.remove(money)
+                    money_count += 1
+
         print_text(30, 30, f'{level_count} уровень', (0, 0, 0), screen)
         print_text(width - 200, 30, f'Монеты: {money_count}', (0, 0, 0), screen)
+
+        screen.blit(hero_list[n_card], (50, y - 40))
 
         pygame.display.flip()
         clock.tick(FPS)
