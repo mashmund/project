@@ -30,14 +30,19 @@ def load_music(name):
 # функция загрузки изображения персонажа
 def load_hero_images(hero_chosen):
     if hero_chosen == 1:
+        # если выбрали ксюшу
         path_list = ['running K/00.png', 'running K/00.png', 'running K/ksusha_2.png', 'running K/ksusha_2.png',
                      'running K/ksusha_2.png', 'running K/00.png', 'running K/00.png']
         hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
+
     if hero_chosen == 2:
+        # если выбрали машу
         path_list = ['runningM/maria_0.png', 'runningM/maria_0.png', 'runningM/maria_2.png', 'runningM/maria_2.png',
                      'runningM/maria_2.png', 'runningM/maria_0.png', 'runningM/maria_0.png']
         hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
+
     if hero_chosen == 3:
+        # если выбрали стешу
         path_list = ['runningS/stesha_0.png', 'runningS/stesha_0.png', 'runningS/stesha_2.png', 'runningS/stesha_2.png',
                      'runningS/stesha_2.png', 'runningS/stesha_0.png', 'runningS/stesha_0.png']
         hero_list = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
@@ -59,8 +64,10 @@ def save_record_to_txt(path, level, money):
 
 # функция записи результата в тхт файл
 def check_record(path, level):
+    # открываем файл для чтение
     with open(path, 'r') as f:
         rec_level, rec_money = map(int, f.readline().split(';'))
+        # проверка на наличие рекорда
         if level > rec_level:
             return True
         else:
