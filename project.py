@@ -204,25 +204,39 @@ def game_over(is_rec):
     fon = pygame.transform.scale(load_image('game_over.jpg'), (size))
     screen.blit(fon, (0, 0))
     if is_rec:
-        print_text(0, 0, 'Новый рекорд', (255, 255, 255), screen)
-    color1 = (255, 255, 255)
-    start_chosen = 0
+        print_text(30, 150, 'Новый рекорд!!!', (0, 0, 0), screen)
+    print_text(30, 200, f'Монет: {money_count}', (0, 0, 0), screen)
     while True:
-        # "кнопка" для повторной игры
-        start_rect = pygame.draw.rect(screen, color1, (450, 270, 50, 30), 40)
-        print_text(300, 310, 'Играть еще раз', (255, 255, 255), screen)
-        # просматриваем варианты событий
+        intro_text = ['', '',
+                      ''
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '                  Нажмите пробел, чтобы начать игру']
+        font = pygame.font.Font(None, 30)
+        text_coord = 50
+        pygame.display.flip()
+
+        for line in intro_text:
+            string_rendered = font.render(line, 1, pygame.Color('white'))
+            intro_rect = string_rendered.get_rect()
+            text_coord += 10
+            intro_rect.top = text_coord
+            intro_rect.x = 10
+            text_coord += intro_rect.height
+            screen.blit(string_rendered, intro_rect)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                if start_rect.collidepoint(pygame.mouse.get_pos()):
-                    # color1 = (255, 0, 0)
-                    # start_chosen = 1
+                if event.type == pygame.K_SPACE or event.type == pygame.KEYDOWN:
                     return next_screen()
-                else:
-                    return 0
-
         pygame.display.flip()
         clock.tick(FPS)
         pygame.display.update()
@@ -382,8 +396,7 @@ hero_chosen = next_screen()
 
 # загружаем нужного персонажа
 hero_list = load_hero_images(hero_chosen)
-
-
+start_time = time.time()
 while hero_chosen:
     is_game = True
     is_game_over = False
