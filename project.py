@@ -40,13 +40,12 @@ def start_screen():
                   '    Добро пожаловать в игру "Школа: нет пути домой"!',
                   '    В игре Вам предстоит пройти путь из дома в школу, ',
                   '    но этот путь будет не так прост, как Вам кажется.',
-                  '    На пути будет множество препятствий, которые ',
-                  '    необходимо преодолеть. Удачи!',
+                  '    На пути будут препятствия, которые необходимо ',
+                  '    преодолеть. Удачи!',
                   '',
                   'ВЫБЕРИТЕ УРОВЕНЬ:         ЛЕГКИЙ                 СРЕДНИЙ',
                   '',
                   '               Нажмите пробел для выбора персонажа']
-
     # фон
     fon = pygame.transform.scale(load_image('project_start_fon.jpg'), (size))
     screen.blit(fon, (0, 0))
@@ -114,7 +113,7 @@ def next_screen():
                   '',
                   '',
                   '',
-                  '                  Нажмите пробел, чтобы начать игру']
+                  '                  Нажмите пробел, чтобы начать игру',]
 
     # фон
     fon = pygame.transform.scale(load_image('f2.jpg'), (size))
@@ -123,17 +122,17 @@ def next_screen():
     # работа с фото ксюши
     image_k = load_image('running K/00.png').convert_alpha()
     ksusha_image = pygame.transform.scale(image_k, (100, 135))
-    screen.blit(ksusha_image, (75, 200))
+    screen.blit(ksusha_image, (75, 180))
 
     # работа с фото маши
     image_m = load_image('runningM/maria_0.png').convert_alpha()
     masha_image = pygame.transform.scale(image_m, (100, 135))
-    screen.blit(masha_image, (245, 200))
+    screen.blit(masha_image, (245, 180))
 
     # работа с фото стеши
     image_s = load_image('runningS/stesha_0.png').convert_alpha()
     stesha_image = pygame.transform.scale(image_s, (100, 135))
-    screen.blit(stesha_image, (415, 200))
+    screen.blit(stesha_image, (415, 180))
 
     font = pygame.font.Font(None, 30)
     text_coord = 50
@@ -147,6 +146,34 @@ def next_screen():
         intro_rect.x = 10
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
+
+    intro_text = ['',
+                  ''
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  'Инструкция: для прыжка нажмите пробел, перепрыгивайте книжки, собирайте монетки.']
+
+    font = pygame.font.Font(None, 20)
+    text_coord = 50
+    pygame.display.flip()
+    for line in intro_text:
+        string_rendered = font.render(line, 0.5, pygame.Color('white'))
+        intro_rect = string_rendered.get_rect()
+        text_coord += 10
+        intro_rect.top = text_coord
+        intro_rect.x = 10
+        text_coord += intro_rect.height
+        screen.blit(string_rendered, intro_rect)
+
 
     color1 = (255, 255, 255)
     color2 = (255, 255, 255)
@@ -205,7 +232,7 @@ def game_over(is_rec):
     screen.blit(fon, (0, 0))
     if is_rec:
         print_text(30, 150, 'Новый рекорд!!!', (0, 0, 0), screen)
-    print_text(30, 200, f'Монет: {money_count}', (0, 0, 0), screen)
+    print_text(30, 200, f'Собрано монет: {money_count}', (0, 0, 0), screen)
     while True:
         intro_text = ['', '',
                       ''
@@ -216,8 +243,8 @@ def game_over(is_rec):
                       '',
                       '',
                       '',
-                      '',
-                      '                  Нажмите пробел, чтобы начать игру']
+                      '                 Нажмите пробел, чтобы начать заново',
+                      '                          или escape для выхода']
         font = pygame.font.Font(None, 30)
         text_coord = 50
         pygame.display.flip()
@@ -234,9 +261,12 @@ def game_over(is_rec):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                if event.type == pygame.K_SPACE or event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
                     return next_screen()
+                elif event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    return
         pygame.display.flip()
         clock.tick(FPS)
         pygame.display.update()
