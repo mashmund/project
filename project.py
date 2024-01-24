@@ -1,11 +1,3 @@
-import os
-
-import random
-
-import time
-
-import pygame
-
 from sup_func import *
 
 FPS = 50
@@ -113,7 +105,7 @@ def next_screen():
                   '',
                   '',
                   '',
-                  '                  Нажмите пробел, чтобы начать игру',]
+                  '                  Нажмите пробел, чтобы начать игру', ]
 
     # фон
     fon = pygame.transform.scale(load_image('f2.jpg'), (size))
@@ -173,7 +165,6 @@ def next_screen():
         intro_rect.x = 10
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
-
 
     color1 = (255, 255, 255)
     color2 = (255, 255, 255)
@@ -526,10 +517,8 @@ while hero_chosen:
 
         # вывод текста о текущем количестве монет
         print_text(width - 200, 30, f'Монеты: {money_count}', (0, 0, 0), screen)
-
         pygame.display.flip()
         clock.tick(FPS)
-
         if is_game_over:
             pygame.time.delay(2000)
             # проверка на наличие рекорда
