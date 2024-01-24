@@ -243,8 +243,8 @@ def game_over(is_rec):
                       '',
                       '',
                       '',
-                      '',
-                      '                  Нажмите пробел, чтобы начать игру']
+                      '                 Нажмите пробел, чтобы начать заново',
+                      '                          или escape для выхода']
         font = pygame.font.Font(None, 30)
         text_coord = 50
         pygame.display.flip()
@@ -261,8 +261,12 @@ def game_over(is_rec):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.K_SPACE or event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
                     return next_screen()
+                elif event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    return
         pygame.display.flip()
         clock.tick(FPS)
         pygame.display.update()
