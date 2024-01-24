@@ -172,14 +172,14 @@ def next_screen():
                     hero_chosen = 1
 
                 elif maria_rect.collidepoint(pygame.mouse.get_pos()):
-                    # если нажали на "ксюшу"
+                    # если нажали на "маша"
                     color1 = (255, 255, 255)
                     color2 = (255, 0, 0)
                     color3 = (255, 255, 255)
                     hero_chosen = 2
 
                 elif stesha_rect.collidepoint(pygame.mouse.get_pos()):
-                    # если нажали на "ксюшу"
+                    # если нажали на "стешу"
                     color1 = (255, 255, 255)
                     color2 = (255, 255, 255)
                     color3 = (0, 0, 255)
@@ -248,7 +248,7 @@ def generate_trap(n, delta):
     trap_list = []
     for i in range(n):
         x_b += random.randint(300, 300 + delta) + 100
-        trap_list.append(Trap(x_b, 340, fon_speed, (50, 50), './data/book.png'))
+        trap_list.append(Trap(x_b, 340, fon_speed, (50, 50), 'book.png'))
 
     # возвращает список препятствий
     return trap_list
@@ -260,7 +260,7 @@ def generate_money(n, trap_list):
     for i in range(n):
         x_money = trap_list[i].rect.x + 500
         y_money = random.randint(120, 330)
-        money_list.append(Money(x_money, y_money, fon_speed, (50, 50), './data/coin.png'))
+        money_list.append(Money(x_money, y_money, fon_speed, (50, 50), 'coin.png'))
 
     # возвращает список монет
     return money_list
@@ -322,7 +322,7 @@ class Trap(pygame.sprite.Sprite):
         # взаимодействие персонажей в случае их столновения
         if pygame.sprite.collide_mask(self, hero):
             # превращение персонажа в лужу
-            path_list = ['data/luzha.png' for _ in range(7)]
+            path_list = ['luzha.png' for _ in range(7)]
             hero.imgs = [pygame.transform.scale(load_image(path), (60, 75)) for path in path_list]
             # остановка движения
             self.fon_speed = 0
@@ -387,7 +387,7 @@ sound4 = load_music('sounds/jump2.mp3')
 sound5 = load_music('sounds/coin.mp3')
 
 # Работаем с изображениями
-fon_image = load_image("data/fon100.jpg")
+fon_image = load_image("fon100.jpg")
 fon_rect = pygame.transform.scale(fon_image, (1200, 400))
 
 # начинается игра
@@ -396,7 +396,6 @@ hero_chosen = next_screen()
 
 # загружаем нужного персонажа
 hero_list = load_hero_images(hero_chosen)
-start_time = time.time()
 while hero_chosen:
     is_game = True
     is_game_over = False
@@ -457,7 +456,7 @@ while hero_chosen:
             elif event.type == IS_MONEY_CHANGED:
                 # увеличение количества монет
                 money_count += 1
-
+            # сбрасываем таймер
         x_fon -= fon_speed
 
         # если список пустой
